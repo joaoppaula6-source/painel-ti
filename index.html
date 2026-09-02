@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Interativo: Help Desk vs. NOC 24/7</title>
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --accent-blue: #38bdf8;
+            --accent-green: #22c55e;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+            max-width: 800px;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--accent-blue);
+        }
+
+        header p {
+            color: var(--text-muted);
+        }
+
+        /* Tabs Navigation */
+        .nav-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            background-color: var(--card-bg);
+            padding: 0.5rem;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background-color: var(--accent-blue);
+            color: var(--bg-dark);
+        }
+
+        /* Dynamic Panel Container */
+        .content-container {
+            width: 100%;
+            max-width: 1100px;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Comparison Grid */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .card.helpdesk .card-header { color: var(--accent-blue); }
+        .card.noc .card-header { color: var(--accent-green); }
+
+        .list-item {
+            margin-bottom: 0.8rem;
+            line-height: 1.5;
+            color: var(--text-muted);
+        }
+
+        .list-item strong {
+            color: var(--text-main);
+        }
+
+        /* Interactive Simulator */
+        .simulator {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .sim-btn-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .sim-btn {
+            background-color: #334155;
+            color: white;
+            border: none;
+            padding: 0.7rem 1.2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .sim-btn:hover {
+            background-color: var(--accent-blue);
+            color: var(--bg-dark);
+        }
+
+        .sim-result {
+            background-color: var(--bg-dark);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-blue);
+        }
+
+        .sim-result h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Painel de Operações de TI</h1>
+        <p>Entenda a sinergia entre o suporte centrado no usuário e o monitoramento infraestrutural contínuo.</p>
+    </header>
+
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab(event, 'visao-geral')">Visão Geral & Comparativo</button>
+        <button class="tab-btn" onclick="switchTab(event, 'fluxo')">Simulador de Incidentes</button>
+        <button class="tab-btn" onclick="switchTab(event, 'impacto')">Impacto de Negócio</button>
+    </div>
+
+    <div class="content-container">
+
+        <div id="visao-geral" class="tab-content active">
+            <div class="grid-2">
+                <div class="card helpdesk">
+                    <div class="card-header">
+                        🎧 Help Desk (Suporte ao Usuário)
+                    </div>
+                    <div class="list-item"><strong>Foco Principal:</strong> Resolução de problemas pontuais enfrentados diretamente pelos usuários/colaboradores.</div>
+                    <div class="list-item"><strong>Modelo de Atuação:</strong> Reativo (Atua após a abertura do chamado ou solicitação).</div>
+                    <div class="list-item"><strong>Interface:</strong> Pessoas para Pessoas (Atendimento via chat, e-mail, telefone ou ticket).</div>
+                    <div class="list-item"><strong>Exemplos de Atuação:</strong>
+                        <ul style="margin-left: 1.2rem; margin-top: 0.4rem;">
+                            <li>Redefinição de senhas bloqueadas.</li>
+                            <li>Lentidão em estações de trabalho.</li>
+                            <li>Configuração de impressoras e e-mails.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card noc">
+                    <div class="card-header">
+                        📡 NOC 24/7 (Network Operations Center)
+                    </div>
+                    <div class="list-item"><strong>Foco Principal:</strong> Manter a infraestrutura, redes e servidores operando sem interrupções.</div>
+                    <div class="list-item"><strong>Modelo de Atuação:</strong> Proativo e Preditivo (Age antes do usuário perceber a falha).</div>
+                    <div class="list-item"><strong>Interface:</strong> Máquinas para Pessoas (Sistemas de telemetria, sensores e dashboards de alertas).</div>
+                    <div class="list-item"><strong>Exemplos de Atuação:</strong>
+                        <ul style="margin-left: 1.2rem; margin-top: 0.4rem;">
+                            <li>Monitoramento de tráfego de rede e consumo de CPU.</li>
+                            <li>Mitigação de quedas de links e servidores.</li>
+                            <li>Aplicação automatizada de rotinas de backup e segurança.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="fluxo" class="tab-content">
+            <div class="simulator">
+                <h2>⚡ Simulador de Incidentes em Tempo Real</h2>
+                <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Clique num cenário para ver como o Help Desk e o NOC atuam simultaneamente:</p>
+
+                <div class="sim-btn-group">
+                    <button class="sim-btn" onclick="runSimulation('servidor')">🚨 Servidor Principal Fora do Ar</button>
+                    <button class="sim-btn" onclick="runSimulation('senha')">🔑 Esquecimento de Senha</button>
+                    <button class="sim-btn" onclick="runSimulation('link')">🌐 Queda no Link de Internet</button>
+                </div>
+
+                <div id="sim-output" class="sim-result">
+                    <h3 style="color: var(--accent-blue);">Selecione um evento acima...</h3>
+                    <p style="color: var(--text-muted);">Veja a dinâmica de resposta rápida integrada.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="impacto" class="tab-content">
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-header" style="color: var(--accent-blue);">
+                        📊 Sem Help Desk + NOC
+                    </div>
+                    <div class="list-item">❌ <strong>Downtime Alto:</strong> Sistemas caem e o suporte só descobre quando o cliente reclama.</div>
+                    <div class="list-item">❌ <strong>Perda de Produtividade:</strong> Colaboradores ficam parados por falhas simples de TI.</div>
+                    <div class="list-item">❌ <strong>Estresse na Equipe:</strong> TI trabalha sempre apagando incêndios.</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header" style="color: var(--accent-green);">
+                        🚀 Com Operação Integrada
+                    </div>
+                    <div class="list-item">✅ <strong>SLA Garantido:</strong> Incidentes resolvidos dentro das metas estipuladas.</div>
+                    <div class="list-item">✅ <strong>Continuidade do Negócio:</strong> Monitoramento 24h impede paradas nas operações críticas.</div>
+                    <div class="list-item">✅ <strong>Foco na Estratégia:</strong> Sua empresa foca no core business enquanto a TI cuida da estabilidade.</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function switchTab(evt, tabName) {
+            let i, tabcontent, tablinks;
+            
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+
+            tablinks = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        function runSimulation(type) {
+            const output = document.getElementById('sim-output');
+            
+            if (type === 'servidor') {
+                output.innerHTML = `
+                    <h3 style="color: #ef4444;">🚨 Cenário: Servidor de Banco de Dados Apresentou Falha</h3>
+                    <p style="margin-top: 0.8rem;"><strong>Ação do NOC 24/7:</strong> Detecta o pico de latência e queda em milissegundos. Dispara script de reinicialização ou chaveia para o servidor secundário (Failover) de forma autônoma.</p>
+                    <p style="margin-top: 0.5rem;"><strong>Ação do Help Desk:</strong> Recebe notificações de usuários relatando lentidão temporária. Informa a equipe de que a contingência já foi acionada pelo NOC e orienta o retorno rápido às atividades.</p>
+                `;
+            } else if (type === 'senha') {
+                output.innerHTML = `
+                    <h3 style="color: var(--accent-blue);">🔑 Cenário: Diretor Comercial Esqueceu a Senha</h3>
+                    <p style="margin-top: 0.8rem;"><strong>Ação do Help Desk:</strong> Atende o chamado via telefone/chat, valida a identidade do usuário por critérios de segurança e realiza o reset de senha em instantes.</p>
+                    <p style="margin-top: 0.5rem;"><strong>Ação do NOC 24/7:</strong> Registra a tentativa malsucedida no relatório mensal de acessos de segurança (audit log), mantendo o ambiente blindado.</p>
+                `;
+            } else if (type === 'link') {
+                output.innerHTML = `
+                    <h3 style="color: #f59e0b;">🌐 Cenário: Rompimento de Fibra da Operadora Principal</h3>
+                    <p style="margin-top: 0.8rem;"><strong>Ação do NOC 24/7:</strong> Alerta imediato no painel. O NOC comuta automaticamente o tráfego de rede para o link redundante (4G/Fibra Secundária) e abre chamado junto à operadora.</p>
+                    <p style="margin-top: 0.5rem;"><strong>Ação do Help Desk:</strong> Não há acúmulo de chamados, pois os colaboradores continuam trabalhando sem perceber que a internet principal caiu.</p>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
